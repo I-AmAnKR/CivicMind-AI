@@ -18,7 +18,7 @@ RUN npm install --production
 COPY backend/ ./
 
 # Copy compiled frontend from Stage 1
-COPY --from=frontend-builder /app/frontend/dist /app/frontend/dist
+COPY --from=frontend-builder /app/frontend/dist /app/public
 
 # Set production environment
 ENV NODE_ENV=production

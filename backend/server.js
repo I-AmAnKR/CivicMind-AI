@@ -47,12 +47,12 @@ app.use('/api/users', require('./routes/users'));
 
 // Serve frontend in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/dist')));
+  app.use(express.static(path.join(__dirname, 'public')));
 
   app.get('*', (req, res) => {
     // If route starts with /api or /uploads, it shouldn't hit this, but just in case
     if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) return res.status(404).json({ message: 'Not found' });
-    res.sendFile(path.resolve(__dirname, '../frontend/dist', 'index.html'));
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
   });
 }
 
