@@ -1,0 +1,517 @@
+================================================================================
+  CIVICMIND AI — COMPLETE PROJECT DOCUMENTATION
+  Smart Governance Platform | Powered by Google Gemini 2.0 Flash
+================================================================================
+
+--------------------------------------------------------------------------------
+1. WHAT IS CIVICMIND AI?
+--------------------------------------------------------------------------------
+
+CivicMind AI is NOT a complaint portal. It is an autonomous, AI-powered civic
+management platform that transforms how citizens report urban problems and how
+governments respond to them.
+
+Traditional systems: Citizen files complaint → It goes into a pile → Ignored.
+CivicMind AI:        Citizen uploads photo → 8 AI agents handle everything else.
+
+The platform uses Google Gemini 2.0 Flash to classify, deduplicate, prioritize,
+route, and verify civic issues — all without human intervention. Government
+authorities only see what matters, in the right order, at the right time.
+
+Project Stack:
+  Frontend  : React + Vite + Tailwind/CSS (http://localhost:5173)
+  Backend   : Node.js + Express + MongoDB (http://localhost:5000)
+  AI Engine : Google Gemini 2.0 Flash API
+  Realtime  : Socket.IO (live updates without page refresh)
+  Maps      : Leaflet.js + OpenStreetMap / Carto dark tiles
+
+--------------------------------------------------------------------------------
+2. WHO USES IT?
+--------------------------------------------------------------------------------
+
+A. CITIZENS (demo login: arvind@civicmind.com / demo123)
+   - Report road damage, waterleaks, garbage, streetlights, sewage, etc.
+   - Earn points and badges for every action
+   - Verify other citizens' reports (+10 pts each)
+   - Track real-time status of their reported issues
+   - Vote on disputed resolutions (community confirmation system)
+
+B. AUTHORITIES (demo login: pwd@civicmind.gov / auth123)
+   - See AI-sorted, priority-ranked issue queue (no more manual sorting)
+   - Issues are pre-classified and pre-routed to their department
+   - Upload proof of resolution (photo)
+   - AI verifies if the fix is genuine using before/after image comparison
+   - Access predictive analytics dashboard
+
+--------------------------------------------------------------------------------
+3. THE 8 AI AGENTS (HOW IT WORKS)
+--------------------------------------------------------------------------------
+
+When a citizen submits a report, 8 Gemini-powered agents activate:
+
+AGENT 1 — Classification Agent
+  What: Analyzes the uploaded photo
+  Does: Determines category (Road Damage, Garbage, Water Supply, etc.)
+  Does: Rates severity (Low / Medium / High / Critical)
+  Does: Generates a professional issue title and description
+  Done: Without citizen filling any form — just upload photo + location
+
+AGENT 2 — Duplicate Detection Agent
+  What: Scans all existing issues within 50-meter GPS radius
+  Does: If a matching issue exists, merges the report (no duplicate created)
+  Does: Increases upvote count on existing issue (shows higher impact)
+  Does: Notifies the original reporter that their issue gained support
+  Result: Clean database, no 10 reports of same pothole confusing officials
+
+AGENT 3 — Priority Scoring Engine
+  What: Assigns a Priority Score (0–100) to every issue
+  Factors:
+    - Severity level (Critical = higher base score)
+    - Number of upvotes and verifications
+    - GPS location risk factor (historical hotspot data)
+    - Weather/seasonal patterns
+    - Department response time history
+  Result: Authorities always see the most urgent issues first
+
+AGENT 4 — Auto-Routing Agent
+  What: Reads issue category and routes to correct government department
+  Examples:
+    - Road Damage    → Public Works Department (PWD)
+    - Water Supply   → Water Supply Department (BWSSB / Jal Board)
+    - Streetlight    → Electricity / Municipal Corp
+    - Garbage        → Sanitation Department
+    - Sewage         → Sewage Board
+  Result: Zero manual sorting by government staff
+
+AGENT 5 — Resolution Verification Agent
+  What: When authority uploads "resolved" proof photo
+  Does: Compares BEFORE photo (original report) with AFTER photo (fix proof)
+  Does: Uses Gemini Vision to check if issue is genuinely resolved
+  Does: Flags fake/reused photos (AI detects AI-generated or reused images)
+  Result: Government cannot mark issues resolved without actual fixing
+  Fallback: If AI suspects fake, issue goes to Community Vote (Agent 6)
+
+AGENT 6 — Community Confirmation Agent
+  What: Activated when AI disputes a resolution
+  Does: Citizens in the area get a notification to vote YES/NO (is it fixed?)
+  Rules:
+    - 3 YES votes = Issue auto-marked resolved
+    - 3 NO votes = Authority flagged, department head notified
+  Result: Citizens become the final check on government accountability
+
+AGENT 7 — Predictive Hotspot Agent
+  What: Analyzes 6 months of historical complaint data
+  Does: Identifies patterns (roads with recurring damage, monsoon risk zones)
+  Does: Predicts future problem areas BEFORE complaints arrive
+  Output:
+    - Heatmap with colored circles (Red=Critical, Orange=High, Yellow=Medium, Green=Low)
+    - "Road C — 87% pothole probability in next 30 days"
+    - "Increase garbage collection near Market every Sunday"
+  Result: Government can ACT before citizens suffer
+
+AGENT 8 — Civic Chat Assistant
+  What: Natural language AI chatbot embedded in the platform
+  Does: Answers questions using real database statistics
+  Does: Falls back to rule-based smart answers when Gemini quota is low
+  Examples:
+    - "How many issues are unresolved?" → Real DB count
+    - "Which area has most garbage complaints?" → Top category from DB
+    - "How do I earn points?" → Explains reward system
+  Result: Citizens get instant help without contacting government
+
+--------------------------------------------------------------------------------
+4. FEATURE DETAILS
+--------------------------------------------------------------------------------
+
+A. REPORT ISSUE (3-step wizard)
+   Step 1: Upload photo (drag-drop or camera)
+           → AI instantly classifies and fills all details
+   Step 2: Confirm location on interactive map
+           → GPS auto-detect or manual pin drop
+   Step 3: Review AI-generated report and submit
+           → AI finds duplicates, calculates priority, routes to department
+   Points: +20 for report, +30 for genuine photo proof
+
+B. COMMUNITY FEED
+   - Chronological list of all issues in the city
+   - Filter by: Critical, Pending, Resolved, Needs Community Vote
+   - Click any issue → Compact detail modal opens showing:
+     - Reporter name, time, photo, description
+     - Status badge (Pending/In Progress/Resolved)
+     - Location, category, department, priority score
+     - Upvote / Verify / Dispute buttons
+     - AI Inspector verdict for resolved issues
+   - Verify issues in one click → +10 points earned
+   - Dispute suspicious resolutions → triggers community vote
+
+C. LIVE MAP VIEW
+   - All reported issues shown as colored pins on India map
+   - Colors: Red=Critical, Orange=High, Yellow=Medium, Green=Low, Teal=Resolved
+   - Filter by status, severity, or category
+   - Legend always visible (dark card, white text — readable in all themes)
+   - Stats overlay: Critical/Resolved/Total counts
+
+D. PREDICTIVE HOTSPOTS (Authorities + Citizens)
+   Tabs:
+   1. AI Overview — City Health Score (0–100 meter), executive summary,
+                    top 6 AI-predicted risk areas with cards
+   2. Risk Heatmap — Leaflet map with colored circles:
+      - Red circles = Critical risk zone (900m radius)
+      - Orange circles = High risk (700m)
+      - Yellow circles = Medium risk (500m)
+      - Green circles = Low risk (350m)
+      - Fallback demo data shows Delhi NCR when Gemini API unavailable
+   3. Trends — Monthly reported vs resolved charts
+   4. Category — Bar chart of top complaint categories
+   5. Department — Resolution rate by department
+   6. Risk Table — Sortable table of all risk areas
+
+E. GAMIFICATION (Points + Badges + Leaderboard)
+   Actions → Points:
+     Report issue:              +20 pts
+     Upload genuine proof:      +30 pts
+     Verify community issue:    +10 pts
+     Authority confirms report: +50 pts
+     Weekly top contributor:   +100 pts
+
+   Levels (unlocked by total points):
+     Bronze    →   0 pts  (starter)
+     Silver    → 100 pts
+     Gold      → 200 pts
+     Platinum  → 500 pts
+     Diamond   → 1000 pts
+
+   Badges:
+     🥉 Local Reporter    — 10 reports submitted
+     🥈 Community Hero    — 50 reports submitted
+     🥇 City Guardian     — 200 reports submitted
+     🕵 AI Verifier       — 100 successful verifications
+     🏆 Road Warrior      — 50 road issues reported
+     💧 Water Guardian    — Water conservation reports
+
+   Leaderboard: Top reporters shown with points, rank, and badges
+
+F. AUTHORITY DASHBOARD
+   - AI-prioritized issue queue (highest priority on top)
+   - One-click status update: Pending → In Progress → Resolved
+   - Resolution proof upload (photo)
+   - AI immediately verifies the fix
+   - If AI disputes: Community vote triggered automatically
+   - Predictive analytics for city planning
+
+G. NOTIFICATIONS
+   - Real-time bell icon in navbar
+   - Live green dot = Socket.IO active
+   - Alerts for: issue status change, verification done, community vote result
+   - "Mark all read" button
+
+H. PROFILE PAGE
+   - Edit: Name, Age, City, Phone, Bio
+   - View: Points, Level, Badge collection
+   - Report history
+
+I. DARK / LIGHT MODE
+   - Toggle in top navbar (sun/moon icon)
+   - All components adapt to theme
+   - Landing page always dark (marketing design)
+   - Map legends always use dark background (readable in all themes)
+
+J. AI CHAT ASSISTANT (bottom-right floating button)
+   - Available on every page
+   - Rounded circle button — follows scroll
+   - Smart fallback: even when Gemini quota is exhausted, provides
+     real answers using database statistics
+   - Keyword matching for 12+ question types
+
+--------------------------------------------------------------------------------
+5. HOW TO RUN THE PROJECT
+--------------------------------------------------------------------------------
+
+Prerequisites:
+  - Node.js v18+
+  - MongoDB running locally (or MongoDB Atlas URI)
+  - Google Gemini API Key
+
+Step 1 — Backend:
+  cd CivicMindAI/backend
+  npm install
+  Create .env file with:
+    PORT=5000
+    MONGODB_URI=mongodb://localhost:27017/civicmind
+    JWT_SECRET=your_secret_key_here
+    GEMINI_API_KEY=your_gemini_api_key_here
+  node server.js
+  → Backend runs on http://localhost:5000
+
+Step 2 — Frontend:
+  cd CivicMindAI/frontend
+  npm install
+  npm run dev
+  → Frontend runs on http://localhost:5173
+
+Step 3 — Seed Demo Data (optional):
+  cd CivicMindAI/backend
+  node seeders/seed.js
+  → Creates demo users + sample issues for testing
+
+Test Credentials:
+  Citizen   : arvind@civicmind.com  / demo123
+  Authority : pwd@civicmind.gov     / auth123
+
+--------------------------------------------------------------------------------
+6. HOW TO TEST EACH FEATURE
+--------------------------------------------------------------------------------
+
+TEST 1 — Citizen Sign Up & Profile Setup
+  1. Open http://localhost:5173
+  2. Click "Get Started" or "Citizen Portal"
+  3. Switch to "Register" tab
+  4. Fill name, email, password
+  5. A profile setup screen appears: enter age, city, phone, bio
+  6. You are now logged in as a new citizen
+  EXPECT: Redirected to Citizen Dashboard with 0 points
+
+TEST 2 — Report an Issue (AI Classification)
+  1. Log in as citizen (arvind@civicmind.com / demo123)
+  2. Click "Report Issue" in sidebar
+  3. Step 1: Drag a photo of a pothole, broken pipe, or garbage
+  4. EXPECT: AI fills Title, Category, Severity, Description automatically
+  5. Step 2: Click on the map where the issue is
+  6. Step 3: Click "Submit & Analyze with AI"
+  EXPECT: Issue created, +20 points added, toast notification shown
+
+TEST 3 — Duplicate Detection
+  1. Submit the same type of issue at nearly the same location twice
+  EXPECT: Second submission merges with first, no duplicate in community feed
+
+TEST 4 — Community Feed & Detail Modal
+  1. Go to "Community Feed" in sidebar
+  2. See list of all reported issues
+  3. Click on any issue card
+  EXPECT: Compact detail modal opens showing:
+    - Reporter name and avatar
+    - Issue photo (left column)
+    - Description, location, stats (right column)
+    - Status badge, category, severity tags
+    - Close button
+  4. Test filters: Critical, Pending, Resolved
+
+TEST 5 — Verify an Issue
+  1. In Community Feed, find any pending issue
+  2. Click "Verify" button on the issue card
+  EXPECT: +10 points added, verification count increases
+
+TEST 6 — Map View
+  1. Click "Live Map" in sidebar
+  2. EXPECT: Colored markers appear on India map for each issue
+  3. Click any marker → popup shows issue info
+  4. Check legend panel (bottom-right of map) — should show colored dots + labels
+  5. Check stats (top-right of map) — Critical/Resolved/Total counts
+  6. Test filters: Status, Severity, Category dropdowns
+
+TEST 7 — Authority Dashboard
+  1. Log out, log in as authority (pwd@civicmind.gov / auth123)
+  2. EXPECT: Authority Dashboard loads with issue queue
+  3. Issues sorted by Priority Score (highest first)
+  4. Click "Start Working" on any issue → status changes to In Progress
+  5. Upload resolution photo → AI verifies it
+  EXPECT: If genuine, status → Resolved. If fake → Community vote triggered.
+
+TEST 8 — Predictive Hotspots
+  1. Click "Predictive Hotspots" in sidebar (both citizen and authority)
+  2. Default tab: AI Overview — see City Health Score meter
+  3. Click "Risk Heatmap" tab
+  EXPECT: Map centered on Delhi/your city with colored circles:
+    - Red circles = Critical risk zones
+    - Orange = High, Yellow = Medium, Green = Low
+  4. Click any circle → popup shows risk details, recommendation
+  5. Click items in "Top Risk Areas" list → map pans to that location
+
+TEST 9 — AI Chat
+  1. Look for floating purple circle button (bottom-right corner)
+  2. Click it to open AI chat
+  3. Type: "how many issues are there?"
+  EXPECT: AI responds with real database count
+  4. Type: "how do I earn points?"
+  EXPECT: AI explains reward system
+  5. Type: "hello"
+  EXPECT: AI greets with current stats
+
+TEST 10 — Gamification / Leaderboard
+  1. Go to "Leaderboard" in sidebar
+  2. See top contributors with points and badges
+  3. Check your own profile — see points, level, and earned badges
+  EXPECT: After reporting/verifying, points update in real-time
+
+TEST 11 — Dark/Light Mode
+  1. Click sun/moon icon in top navbar
+  2. EXPECT: Entire app switches theme instantly
+  3. Go to Map View in light mode
+  EXPECT: Map legend and stats overlay still readable (dark background forced)
+
+TEST 12 — Real-Time Updates
+  1. Open two browser windows — both logged in as different users
+  2. In Window 1 (citizen): Report a new issue
+  3. In Window 2 (authority): Watch Dashboard
+  EXPECT: New issue appears in authority queue within seconds (Socket.IO)
+
+TEST 13 — Profile Editing
+  1. Click your avatar/name in top-right navbar
+  2. Click "My Profile"
+  3. Edit name, phone, city, bio
+  4. Save
+  EXPECT: Changes persist after page refresh
+
+TEST 14 — Notification System
+  1. Log in as authority, resolve an issue
+  2. Log in as citizen who reported that issue
+  EXPECT: Bell icon shows red badge, notification reads "Your issue was resolved"
+
+--------------------------------------------------------------------------------
+7. ARCHITECTURE
+--------------------------------------------------------------------------------
+
+FRONTEND PAGES:
+  /              → Landing.jsx        (public, always dark theme)
+  /dashboard     → CitizenDashboard.jsx / AuthorityDashboard.jsx
+  /report        → ReportIssue.jsx    (3-step wizard)
+  /map           → MapView.jsx        (Leaflet map)
+  /community     → CommunityFeed.jsx  (feed + detail modal)
+  /chat          → ChatAI.jsx         (chat interface)
+  /leaderboard   → Leaderboard.jsx    (points + badges)
+  /predictions   → PredictiveAnalytics.jsx (6-tab analytics)
+  /profile       → Profile.jsx        (user settings)
+
+BACKEND API ROUTES:
+  POST /api/auth/register    → Register new user
+  POST /api/auth/login       → Login, returns JWT token
+  GET  /api/auth/me          → Get current user
+  PUT  /api/auth/profile     → Update profile details
+
+  GET  /api/issues           → List issues (with filters)
+  POST /api/issues           → Create new issue (triggers AI)
+  PUT  /api/issues/:id/status    → Update status (authority)
+  POST /api/issues/:id/verify    → Community verify
+  POST /api/issues/:id/upvote    → Upvote
+  POST /api/issues/:id/resolve   → Authority resolution + AI verify
+  POST /api/issues/:id/confirm   → Community confirm resolution
+
+  POST /api/ai/chat          → AI chat message
+  GET  /api/ai/predictions   → Get AI predictions + analytics
+
+  GET  /api/notifications    → Get user notifications
+  PUT  /api/notifications/read → Mark all read
+
+  GET  /api/leaderboard      → Top contributors
+
+BACKEND AI FILES:
+  ai/classificationAgent.js  → Photo → category, severity, title, description
+  ai/duplicateAgent.js       → Nearby issue check
+  ai/priorityAgent.js        → Priority score calculation
+  ai/routingAgent.js         → Category → Department mapping
+  ai/resolutionAgent.js      → Before/after photo verification
+  ai/predictiveAgent.js      → Hotspot + trend analysis
+  ai/chatAgent.js            → Civic chat with DB fallback
+
+DATABASE MODELS:
+  User.js    → name, email, password, role, points, badges, profile fields
+  Issue.js   → title, description, category, severity, status, location,
+               images, priorityScore, upvotes, verifications, assignedDept,
+               resolutionVerification, communityConfirms, duplicateCount
+  Notification.js → user, title, message, isRead, createdAt
+
+SOCKET EVENTS:
+  connection           → User joins, enters area room
+  join-area           → Subscribe to location-based updates
+  new-issue           → Broadcast when new issue submitted
+  issue-update        → Broadcast when status changes
+  notification        → Push notification to specific user
+
+--------------------------------------------------------------------------------
+8. DESIGN SYSTEM
+--------------------------------------------------------------------------------
+
+Color Palette (Dark Theme — default):
+  --bg-primary:      #05050F  (deep dark)
+  --bg-secondary:    #0A0A1E  (card background)
+  --primary:         #6C63FF  (purple)
+  --accent:          #00D4FF  (cyan)
+  --critical:        #FF4757  (red)
+  --high:            #FF6B35  (orange)
+  --medium:          #FFD93D  (yellow)
+  --low:             #6BCB77  (green)
+
+Color Palette (Light Theme):
+  --bg-primary:      #F5F5FA  (light gray)
+  --bg-secondary:    #FFFFFF  (white)
+  --text-primary:    #1A1A2E  (dark)
+  --text-secondary:  #4A4A6A  (medium dark)
+
+Typography:
+  Headings: Outfit (Google Font) — 700–900 weight
+  Body:     Inter (Google Font) — 400–600 weight
+
+Design Principles:
+  - Landing page: Always dark, never inherits app theme
+  - Map overlays: Always dark background (never light, text always white)
+  - Glassmorphism: rgba backgrounds + blur backdrop-filter
+  - Micro-animations: fade-in, slide-up, pulse-glow, float
+  - Gradients: primary (purple→cyan), secondary (cyan→green)
+
+--------------------------------------------------------------------------------
+9. KEY DECISIONS & WHY
+--------------------------------------------------------------------------------
+
+Q: Why does the landing page not change with light/dark mode?
+A: The landing page is a marketing page with dark atmospheric design.
+   Using theme variables made text invisible in light mode.
+   Fix: All landing sections use hardcoded dark colors (rgba, white text).
+
+Q: Why does the map legend always have dark background?
+A: Leaflet maps render on white/light tiles. The legend panel was using
+   CSS variables that become dark text on dark background in dark mode.
+   Fix: map-legend class hardcoded to rgba(8,4,24,0.92) + white text.
+
+Q: Why does chat still work even when Gemini API quota is exceeded?
+A: chatAgent.js has a full smart fallback:
+   - Tries Gemini first
+   - On error (429 quota), switches to keyword-matching DB queries
+   - 12+ question types handled: stats, rewards, reporting, hotspots, etc.
+   - Always returns a useful response, never an error message
+
+Q: Why are predictive hotspots visible even with no data?
+A: DEMO_HOTSPOTS array in PredictiveAnalytics.jsx provides 6 pre-defined
+   Delhi NCR risk zones when Gemini API returns empty predictions.
+   Map auto-centers to Delhi with these demo circles.
+
+Q: Can authorities raise issues?
+A: No — by design. Authorities only resolve issues raised by citizens.
+   This ensures AI duplicate detection and priority scoring isn't bypassed.
+   The AI pipeline only works correctly when issues come from citizens
+   with location data and photos.
+
+Q: What happens if someone submits a fake resolution photo?
+A: Gemini Vision compares the before and after photos:
+   - If the issue looks genuinely fixed: marked Resolved
+   - If photo looks reused/fake/unrelated: status = "Needs Further Action"
+   - Community voting activated: citizens in the area vote YES/NO
+   - 3 NO votes = Authority department flagged to their supervisor
+
+--------------------------------------------------------------------------------
+10. FUTURE ROADMAP
+--------------------------------------------------------------------------------
+
+- SMS/WhatsApp integration for citizens without smartphones
+- Multi-language support (Hindi, Tamil, Kannada etc.)
+- Government API integration (BBMP, MCD, BMC portals)
+- Mobile app (React Native)
+- SLA enforcement: Auto-escalate if not resolved in 48h
+- Satellite imagery integration for road monitoring
+- Carbon footprint tracking for civic activities
+- Integration with Smart City dashboards
+
+--------------------------------------------------------------------------------
+  END OF DOCUMENTATION
+  CivicMind AI — "Not a Complaint Portal. It's AI."
+  Powered by Google Gemini 2.0 Flash | Built for Smart Governance
+--------------------------------------------------------------------------------

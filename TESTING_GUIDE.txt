@@ -1,0 +1,602 @@
+╔══════════════════════════════════════════════════════════════════════════════════╗
+║           CivicMind AI — Complete Feature Testing Guide                        ║
+║           Version: 1.0  |  Date: 2026-06-27                                   ║
+╚══════════════════════════════════════════════════════════════════════════════════╝
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ STEP 0 ─ START THE PROJECT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Open TWO terminals:
+
+  Terminal 1 (Backend):
+    cd "C:\Users\Arvind kumar\Desktop\PROJECT-Vibe2ship\CivicMindAI\backend"
+    node server.js
+    ✅ Should print: CivicMind AI Server running on port 5000
+
+  Terminal 2 (Frontend):
+    cd "C:\Users\Arvind kumar\Desktop\PROJECT-Vibe2ship\CivicMindAI\frontend"
+    npm run dev
+    ✅ Should print: Local: http://localhost:5173
+
+  Open browser → http://localhost:5173
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 1 ─ USER AUTHENTICATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 1.1 — Register a Citizen
+  1. Go to http://localhost:5173
+  2. Click "Get Started" or "Sign Up"
+  3. Enter:
+       Name    : Rahul Sharma
+       Email   : rahul@test.com
+       Password: Test@1234
+       Role    : Citizen
+  4. Click Register
+  ✅ EXPECTED: Logged in, redirected to Citizen Dashboard
+  ✅ EXPECTED: Toast says "+50 sign-up bonus points!"
+  ✅ EXPECTED: Points show 50 in sidebar
+
+TEST 1.2 — Register an Authority User
+  1. Open Incognito window → http://localhost:5173
+  2. Register:
+       Name       : Delhi PWD Officer
+       Email      : pwd@test.com
+       Password   : Test@1234
+       Role       : Authority
+       Department : PWD (Public Works Department)
+  ✅ EXPECTED: Redirected to Authority Dashboard
+  ✅ EXPECTED: Sidebar shows "Authority Panel" option
+
+TEST 1.3 — Login / Logout
+  1. Logout from current session
+  2. Login with rahul@test.com / Test@1234
+  ✅ EXPECTED: Lands on Dashboard with existing points
+
+TEST 1.4 — Firebase Google Login
+  1. Click "Continue with Google"
+  ✅ EXPECTED: Google OAuth popup
+  ✅ EXPECTED: Auto-registered and logged in
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 2 ─ AI IMAGE CLASSIFICATION (Agent 1)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 2.1 — Report a Pothole (Road Damage)
+  1. Login as Rahul (citizen)
+  2. Click "Report Issue" in sidebar
+  3. Upload a photo of a pothole (any road damage image)
+  4. Click map to set location (anywhere in India)
+  ✅ EXPECTED: AI shows "Category: Road Damage"
+  ✅ EXPECTED: AI shows Severity (Low/Medium/High/Critical)
+  ✅ EXPECTED: AI shows description of the issue
+  ✅ EXPECTED: AI shows Risk level
+
+TEST 2.2 — Report a Streetlight Issue
+  1. Upload a photo of a broken/dark streetlight
+  ✅ EXPECTED: AI shows "Category: Streetlight"
+  ✅ EXPECTED: Department shows "Electricity Department"
+
+TEST 2.3 — Report Garbage
+  1. Upload a photo of garbage on the road
+  ✅ EXPECTED: AI shows "Category: Garbage"
+  ✅ EXPECTED: Department shows "Municipal Corporation"
+
+TEST 2.4 — Confidence Score
+  ✅ EXPECTED: AI confidence shown as percentage (e.g., "High: 87%")
+  ✅ EXPECTED: AI-generated title for the issue
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 3 ─ AI DUPLICATE DETECTION (Agent 2)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SETUP: First report 1 pothole issue at a specific location (note the lat/lng).
+
+TEST 3.1 — Duplicate Detected
+  1. Login as a DIFFERENT user (open new incognito → register Aman@test.com)
+  2. Go to Report Issue
+  3. Upload the SAME or similar pothole photo
+  4. Set location VERY CLOSE to the first report (within 50 meters)
+     Tip: Click the same spot on the map
+  5. Submit
+
+  ✅ EXPECTED: Orange "🔥 Duplicate Detected by AI!" banner appears
+  ✅ EXPECTED: AI Confidence % shown (e.g., 87%)
+  ✅ EXPECTED: "Match Factors" shown (image similarity, GPS distance, description)
+  ✅ EXPECTED: "Added as Supporter" message
+  ✅ EXPECTED: +15 points awarded (less than the original reporter's +25)
+  ✅ EXPECTED: Original reporter gets socket notification "Someone confirmed your report"
+
+TEST 3.2 — Already Supporting
+  1. Same user tries to report the same issue again
+  ✅ EXPECTED: "You are already a supporter of this issue!" message
+  ✅ EXPECTED: No duplicate database entry
+
+TEST 3.3 — Unique Issue (Different Location)
+  1. Upload same photo but click a location 500m away
+  ✅ EXPECTED: NO duplicate banner — treated as new unique issue
+  ✅ EXPECTED: New report created with +25 points
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 4 ─ AI RESOLUTION VERIFICATION (Agent 5)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SETUP: Have an existing issue in "Pending" or "Verified" status.
+
+TEST 4.1 — Authority Uploads Fix (Genuine Fix)
+  1. Login as Authority (pwd@test.com)
+  2. Go to Authority Panel
+  3. Find an issue → click "Mark as Resolved"
+  4. Upload a REAL "fixed" photo (e.g., repaired road image)
+  5. Submit
+
+  ✅ EXPECTED: Gemini compares Before vs After images
+  ✅ EXPECTED: If genuinely fixed → Status changes to "Resolved"
+  ✅ EXPECTED: AI shows "Resolved: Confidence 90%+" with explanation
+  ✅ EXPECTED: Original reporter gets +50 points
+  ✅ EXPECTED: Socket notification fired to reporter
+
+TEST 4.2 — Authority Uploads Fake/Wrong Image
+  1. Login as Authority
+  2. Upload an UNRELATED photo as "fix" (e.g., a random landscape photo)
+
+  ✅ EXPECTED: AI shows "Not Resolved"
+  ✅ EXPECTED: Status changes to "Needs Further Action" 
+  ✅ EXPECTED: AI explains why it's not resolved
+  ✅ EXPECTED: Community is asked to vote (YES/NO)
+
+TEST 4.3 — Partially Fixed
+  1. Upload a photo where the issue is only partially fixed
+  ✅ EXPECTED: AI shows "Partially Resolved"
+  ✅ EXPECTED: Confidence and explanation provided
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 5 ─ REAL-TIME SOCKET.IO NOTIFICATIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 5.1 — New Issue Notification (Area-based)
+  1. Open TWO browser windows
+     Window A: Login as Rahul (citizen), set location in Delhi
+     Window B: Login as Aman (another citizen), same area
+  2. From Window B: Report a new issue
+  ✅ EXPECTED: Window A shows live toast "🚨 New issue reported nearby!"
+
+TEST 5.2 — Supporter Notification
+  1. Rahul reported an issue in Window A
+  2. From Window B (Aman): Report same issue nearby (duplicate)
+  ✅ EXPECTED: Window A (Rahul) gets "🙌 Someone confirmed your report!" toast instantly
+
+TEST 5.3 — Connection Indicator
+  ✅ EXPECTED: Green WiFi icon in Navbar = connected to server
+  ✅ EXPECTED: Notification bell in Navbar shows count badge
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 6 ─ SMART ROUTING AGENT (Agent 4)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 6.1 — Auto Department Routing
+  1. Report a "Water Supply" issue
+  ✅ EXPECTED: Success card shows "🧭 Smart Routing AI" section
+  ✅ EXPECTED: Department: "Delhi Jal Board / Water Supply Department"
+  ✅ EXPECTED: Routing Confidence: e.g., "92% confident"
+
+TEST 6.2 — Escalation Detection
+  1. Report a water issue with description:
+     "Massive water leak inside government school. Children cannot attend classes."
+  ✅ EXPECTED: "🚨 ESCALATION NEEDED" badge shown
+  ✅ EXPECTED: Escalation reason displayed
+
+TEST 6.3 — Suggested Actions
+  1. Report any issue (Road Damage recommended)
+  ✅ EXPECTED: "Suggested Actions for Dept" section shows 3 action items
+  ✅ EXPECTED: Actions are specific to the category (e.g., "Deploy repair crew within 24h")
+
+TEST 6.4 — Routing Confidence
+  ✅ EXPECTED: Confidence % between 70–99 shown
+  ✅ EXPECTED: "Why:" section explains the routing decision
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 7 ─ AI PRIORITY ENGINE (Agent 3)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 7.1 — Priority Score on Report Submission
+  1. Report an issue
+  ✅ EXPECTED: After submission, "AI Priority" shows in the result card
+  ✅ EXPECTED: Priority label = Critical / High / Medium / Low
+
+TEST 7.2 — Context Multiplier (Near School/Hospital)
+  1. Report a water issue with description:
+     "Water pipe burst near Government Hospital, patients affected"
+  ✅ EXPECTED: Higher priority score (hospital keyword detected)
+
+TEST 7.3 — Authority Dashboard Sorted by Priority
+  1. Login as Authority
+  2. Open Authority Panel
+  ✅ EXPECTED: Issues sorted Critical → High → Medium → Low (by priorityScore)
+  ✅ EXPECTED: Red badge = Critical, Orange = High, Yellow = Medium, Green = Low
+
+TEST 7.4 — Priority Escalation with Votes
+  1. Create an issue
+  2. Have 3+ users upvote and verify it
+  ✅ EXPECTED: Priority score increases in the database (verifications × 5 + upvotes × 3)
+
+TEST 7.5 — View Priority Breakdown (Leaderboard)
+  1. Go to Leaderboard → "💰 Earn Points" tab
+  ✅ EXPECTED: "⚡ AI Priority Engine" section shows all 6 factors with weights
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 8 ─ COMMUNITY VERIFICATION & FEED
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 8.1 — Verify Another Citizen's Report
+  1. Login as Aman (different from reporter)
+  2. Go to Community Feed
+  3. Click on any Pending issue
+  4. Click "Verify — YES this is real"
+  ✅ EXPECTED: Verification count increases (+1)
+  ✅ EXPECTED: Aman earns +10 points
+  ✅ EXPECTED: After 3 verifications → status becomes "Verified"
+
+TEST 8.2 — Upvote an Issue
+  1. Click 👍 on any issue card
+  ✅ EXPECTED: Upvote count increases
+  ✅ EXPECTED: +5 points awarded
+
+TEST 8.3 — Community Vote on Resolution (YES/NO)
+  1. Find an issue with status "Needs Further Action" (failed AI verification)
+  2. Cast YES or NO vote
+  ✅ EXPECTED: Vote registered
+  ✅ EXPECTED: +8 points awarded
+  ✅ EXPECTED: If majority YES → status changes to Resolved
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 9 ─ MAP VIEW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 9.1 — View Issues on Map
+  1. Click "Map View" in sidebar
+  ✅ EXPECTED: Dark map loads with colored markers
+  ✅ EXPECTED: Red = Critical, Orange = High, Yellow = Medium, Green = Low
+
+TEST 9.2 — Click a Marker
+  1. Click any marker on the map
+  ✅ EXPECTED: Popup shows issue title, category, status, severity
+  ✅ EXPECTED: Popup has "View Details" button
+
+TEST 9.3 — Filter by Category
+  1. Use the filter panel (top right or sidebar)
+  ✅ EXPECTED: Only selected category markers shown
+
+TEST 9.4 — My Location
+  1. Click "Use My Location" button
+  ✅ EXPECTED: Map centers on your real GPS location
+  ✅ EXPECTED: Nearby issues appear
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 10 ─ AI CHAT ASSISTANT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 10.1 — Ask About Platform
+  1. Click "AI Assistant" in sidebar
+  2. Type: "How do I report an issue?"
+  ✅ EXPECTED: AI explains the reporting process
+
+TEST 10.2 — Ask About Issues
+  1. Type: "What are the most critical issues right now?"
+  ✅ EXPECTED: AI fetches and describes current issues
+
+TEST 10.3 — Ask About Points
+  1. Type: "How do I earn more points?"
+  ✅ EXPECTED: AI explains gamification system
+
+TEST 10.4 — Civic Question
+  1. Type: "Which department handles water leakage in Delhi?"
+  ✅ EXPECTED: AI answers with Delhi Jal Board info
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 11 ─ GAMIFICATION (Points, Badges, Leaderboard)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 11.1 — Points Accumulation
+  1. Login as Rahul
+  2. Perform these actions and check points after each:
+     - Register              → +50 pts
+     - Report an issue       → +25 pts  (total: 75)
+     - Upvote another issue  → +5 pts   (total: 80)
+     - Verify an issue       → +10 pts  (total: 90)
+  ✅ EXPECTED: Points update in Sidebar and Leaderboard in real-time
+
+TEST 11.2 — Badge Earned Toast
+  1. Report your FIRST ever issue
+  ✅ EXPECTED: Golden toast appears: "📸 Badge Unlocked: First Report!"
+  ✅ EXPECTED: Badge visible in Leaderboard → Badges tab
+
+TEST 11.3 — View All Badges
+  1. Go to Leaderboard → "🏅 Badges" tab
+  ✅ EXPECTED: All 15 badges shown in category grid
+  ✅ EXPECTED: Earned badges are bright gold with glow
+  ✅ EXPECTED: Unearned badges are dimmed/grayscale
+
+TEST 11.4 — Level Progression
+  1. Check Leaderboard top stats
+  ✅ EXPECTED: Level shown (Bronze / Silver / Gold / Platinum / Diamond)
+  ✅ EXPECTED: Progress bar shows % toward next level
+     - 0 pts    = Bronze  🥉
+     - 100 pts  = Silver  🥈
+     - 200 pts  = Gold    🥇
+     - 500 pts  = Platinum⚡
+     - 1000 pts = Diamond 💎
+
+TEST 11.5 — Monthly Challenge
+  1. Go to Leaderboard (main page)
+  ✅ EXPECTED: Monthly challenge card shown at top
+  ✅ EXPECTED: Shows challenge title, description, goal, and reward
+
+TEST 11.6 — Leaderboard Rankings
+  1. Go to Leaderboard → "🏆 Leaderboard" tab
+  ✅ EXPECTED: Citizens sorted by points (highest first)
+  ✅ EXPECTED: Your own entry highlighted with "YOU" badge
+  ✅ EXPECTED: Top 3 have gold/silver/bronze glow
+  ✅ EXPECTED: Rank medals: 🥇 🥈 🥉
+
+TEST 11.7 — How to Earn Tab
+  1. Go to Leaderboard → "💰 Earn Points" tab
+  ✅ EXPECTED: Full points guide with icons
+  ✅ EXPECTED: AI Priority Engine explainer (6 factors)
+  ✅ EXPECTED: Smart Routing examples table
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 12 ─ PREDICTIVE HOTSPOTS (Agent 7)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NOTE: Needs 5+ issues in the database to show meaningful predictions.
+      Report 5–10 issues at various locations first.
+
+TEST 12.1 — Access Predictive Dashboard
+  1. Click "Predictive Hotspots" in sidebar
+  ✅ EXPECTED: Full dashboard loads with 4 tabs
+
+TEST 12.2 — AI Overview Tab
+  1. Click "🧠 AI Overview" tab
+  ✅ EXPECTED: "City Health Score" gauge (0-100) shown
+  ✅ EXPECTED: Gemini executive summary paragraph
+  ✅ EXPECTED: Risk prediction cards (category, probability %, AI reason)
+  ✅ EXPECTED: Seasonal warnings (e.g., monsoon risk)
+  ✅ EXPECTED: 3 government action recommendations
+
+TEST 12.3 — Risk Heatmap Tab
+  1. Click "🗺️ Risk Heatmap" tab
+  ✅ EXPECTED: Dark map loads (CartoDB dark tiles)
+  ✅ EXPECTED: Colored circles: Red = Critical, Orange = High, Yellow = Medium
+  ✅ EXPECTED: Solid circles = AI predictions, Dashed = raw data
+  ✅ EXPECTED: Click a circle → popup with area name, risk %, recommendation
+  ✅ EXPECTED: Left panel list of risk areas — click to fly to location
+
+TEST 12.4 — Trend Analysis Tab
+  1. Click "📈 Trends" tab
+  ✅ EXPECTED: Area chart (6-month reported vs resolved)
+  ✅ EXPECTED: Bar chart (issues by category)
+  ✅ EXPECTED: Pie chart (status breakdown)
+  ✅ EXPECTED: Resolution time comparison by category
+
+TEST 12.5 — Department Performance Tab
+  1. Click "🏛️ Departments" tab
+  ✅ EXPECTED: Resolution rate bar chart per department
+  ✅ EXPECTED: AI performance insights (Performing / Needs Attention / Critical)
+  ✅ EXPECTED: Data table with inline progress bars
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 13 ─ AI ACTION RECOMMENDATIONS (Agent 8)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+NOTE: Needs 3+ issues reported in nearby locations to trigger pattern detection.
+
+TEST 13.1 — View AI Recommendations
+  1. Go to Leaderboard → "🤖 AI Recommendations" tab
+  ✅ EXPECTED: Loading spinner while Gemini analyzes patterns
+  ✅ EXPECTED: 4–6 recommendation cards appear
+
+TEST 13.2 — Recommendation Card Structure
+  ✅ EXPECTED: Each card shows:
+     - Icon (emoji)
+     - Title (concise action name)
+     - Type badge: PREVENTIVE / OPERATIONAL / INFRASTRUCTURE / POLICY
+     - Timeframe badge: IMMEDIATE / THIS WEEK / THIS MONTH / THIS QUARTER
+     - Description (what pattern triggered this)
+     - Action (what government should do)
+     - Expected impact
+
+TEST 13.3 — Pattern-based Recommendations
+  Create these conditions first:
+  a) Report 3+ Road Damage issues in same area → AI recommends "Full resurfacing"
+  b) Report Garbage issues on multiple Mondays → AI recommends "Add Sunday collection"
+  c) Report 3+ Streetlight issues in same sector → AI recommends "Circuit inspection"
+  ✅ EXPECTED: Recommendations match the patterns in your database
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 14 ─ AUTHORITY DASHBOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 14.1 — View All Issues (Priority Sorted)
+  1. Login as Authority (pwd@test.com)
+  2. Click "Authority Panel"
+  ✅ EXPECTED: Issues sorted Critical → High → Medium → Low
+  ✅ EXPECTED: Priority color badges visible
+
+TEST 14.2 — Filter by Status/Category
+  1. Use filter dropdowns
+  ✅ EXPECTED: List updates with selected filters
+
+TEST 14.3 — Update Issue Status
+  1. Click an issue → change status to "In Progress"
+  ✅ EXPECTED: Status updates in real-time
+  ✅ EXPECTED: Citizen gets notification
+
+TEST 14.4 — Mark as Resolved (AI Verification trigger)
+  1. Click "Mark Resolved" on any issue
+  2. Upload a "fixed" photo
+  ✅ EXPECTED: AI Resolution Verification runs (compare before/after)
+  ✅ EXPECTED: Result shows Resolved / Partially Resolved / Not Resolved
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 15 ─ CITIZEN DASHBOARD
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 15.1 — Dashboard Overview Cards
+  1. Login as citizen → Dashboard
+  ✅ EXPECTED: Stats cards: Total Reports, Verified, Resolved, Points
+  ✅ EXPECTED: Recent activity section
+
+TEST 15.2 — My Issues List
+  ✅ EXPECTED: Only your own reported issues shown
+  ✅ EXPECTED: Status badges colored correctly
+
+TEST 15.3 — Quick Actions
+  ✅ EXPECTED: "Report Issue", "View Map", "Community Feed" quick buttons
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ FEATURE 16 ─ NOTIFICATIONS SYSTEM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TEST 16.1 — Notification Bell
+  1. Click bell icon in Navbar
+  ✅ EXPECTED: Dropdown opens with notification list
+  ✅ EXPECTED: Unread count badge visible
+
+TEST 16.2 — Mark as Read
+  1. Click a notification
+  ✅ EXPECTED: Notification marked as read (no longer bold)
+
+TEST 16.3 — Mark All Read
+  1. Click "Mark All Read"
+  ✅ EXPECTED: All notifications cleared from unread count
+
+TEST 16.4 — Badge Notification
+  1. Earn a new badge (report first issue)
+  ✅ EXPECTED: Golden toast notification fires
+  ✅ EXPECTED: Badge notification appears in bell dropdown
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ QUICK SMOKE TEST — 10 MINUTES ALL FEATURES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Run these in order to touch every feature in 10 minutes:
+
+  [ ] 1.  Register citizen "Rahul" → check +50 bonus points
+  [ ] 2.  Report a pothole photo → check AI classification result
+  [ ] 3.  Check "🧭 Smart Routing AI" section → department + confidence %
+  [ ] 4.  Check "AI Priority" label in result card
+  [ ] 5.  Report same issue nearby in incognito → duplicate detection fires
+  [ ] 6.  Login as Authority → see issues sorted by priority
+  [ ] 7.  Authority uploads "fixed" photo → check AI resolution verdict
+  [ ] 8.  Go to Community Feed → upvote and verify another issue
+  [ ] 9.  Check Leaderboard → your rank, points, level, badges
+  [ ] 10. Click "🏅 Badges" tab → see all 15 badges, yours glowing
+  [ ] 11. Click "🤖 AI Recommendations" tab → wait for Gemini analysis
+  [ ] 12. Go to "Predictive Hotspots" → check heatmap + AI overview
+  [ ] 13. Open AI Chat → ask "What is the status of road damage reports?"
+  [ ] 14. Check Navbar → green WiFi dot = real-time connected
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ COMMON ISSUES & FIXES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PROBLEM: AI features not working
+  FIX: Check backend terminal for "GEMINI_API_KEY" error
+       Verify .env file has: GEMINI_API_KEY=your_key_here
+
+PROBLEM: Map doesn't load
+  FIX: Check internet connection (Leaflet loads tiles from CDN)
+
+PROBLEM: Duplicate detection not triggering
+  FIX: Make sure you click VERY close to the original location
+       Within 50 meters (practically same map spot)
+
+PROBLEM: Badge not awarding
+  FIX: Check that report was successfully saved (check backend console)
+       Badge checks run after DB save
+
+PROBLEM: Predictive Analytics shows no data
+  FIX: Need at least 5 issues in DB. Report more issues first.
+
+PROBLEM: Authority can't see issues
+  FIX: Make sure user role is "authority" in MongoDB
+       Check: db.users.findOne({email: "pwd@test.com"}).role
+
+PROBLEM: Socket notifications not firing
+  FIX: Check backend console for "Client connected" on browser load
+       Make sure CLIENT_URL in .env matches frontend URL
+
+PROBLEM: Images not uploading
+  FIX: Check that /uploads folder exists in backend directory
+       Check that multer is installed: cd backend && npm list multer
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ TEST DATA — SAMPLE IMAGES TO USE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For quick testing, search Google Images for:
+  Pothole test  → "road pothole india"
+  Streetlight   → "broken streetlight dark pole"
+  Garbage       → "garbage dumped road india"
+  Water leak    → "water pipe burst leak"
+  Sewage        → "open drain sewage overflow"
+  Fixed road    → "newly repaired road india" (for resolution verification)
+  Fake fix      → "garden landscape photo" (to test fake resolution rejection)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ AI AGENTS SUMMARY (for judges/demo)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  Agent 1 — Image Classifier   → classifyIssue.js
+            Gemini Vision reads photo → category, severity, title, description
+
+  Agent 2 — Duplicate Detector → duplicateDetector.js
+            GPS radius + Gemini Vision compares images → duplicate/unique
+
+  Agent 3 — Priority Engine    → priorityEngine.js
+            7-factor formula → Critical/High/Medium/Low score
+
+  Agent 4 — Smart Router       → routeIssue.js
+            Gemini routes to correct department + escalation logic
+
+  Agent 5 — Resolution Verifier→ verifyIssue.js
+            Gemini compares before/after → Resolved/Partial/Not Resolved
+
+  Agent 6 — AI Chat Assistant  → chatAgent.js
+            Gemini with DB context → answers civic queries
+
+  Agent 7 — Predictive Hotspots→ predictiveAgent.js + analyticsAgent.js
+            DB aggregations → Gemini → risk maps, seasonal forecasts
+
+  Agent 8 — Action Recommender → recommendationAgent.js
+            Pattern detection (clusters, day trends) → systemic actions
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ END OF TESTING GUIDE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ CivicMind AI — Not a complaint portal.
+ An AI-powered autonomous civic management platform.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
