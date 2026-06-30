@@ -45,17 +45,6 @@ app.use('/api/ai', require('./routes/ai'));
 app.use('/api/notifications', require('./routes/notifications'));
 app.use('/api/users', require('./routes/users'));
 
-// Serve frontend in production
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'public')));
-
-  app.get('*', (req, res) => {
-    // If route starts with /api or /uploads, it shouldn't hit this, but just in case
-    if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) return res.status(404).json({ message: 'Not found' });
-    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
-  });
-}
-
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ 
@@ -87,6 +76,22 @@ io.on('connection', (socket) => {
 // Make io accessible to controllers
 app.set('io', io);
 
+// Serve frontend in production (must be after API routes but before 404 handler)
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, 'public')));
+
+  app.get('*', (req, res) => {
+    // If route starts with /api or /uploads, it shouldn't hit this, return next to fall through to 404 handler
+    if (req.path.startsWith('/api/') || req.path.startsWith('/uploads/')) return res.status(404).json({ success: false, message: 'API Route not found' });
+    res.sendFile(path.resolve(__dirname, 'public', 'index.html'));
+  });
+}
+
+// 404 handler (must be last)
+app.use((req, res) => {
+  res.status(404).json({ success: false, message: 'Route not found' });
+});
+
 // Global error handler
 app.use((err, req, res, next) => {
   console.error('❌ Error:', err.message);
@@ -94,11 +99,6 @@ app.use((err, req, res, next) => {
     success: false,
     message: err.message || 'Internal Server Error',
   });
-});
-
-// 404 handler
-app.use((req, res) => {
-  res.status(404).json({ success: false, message: 'Route not found' });
 });
 
 const PORT = process.env.PORT || 5000;
