@@ -1514,3 +1514,221 @@ textarea.form-input { resize: vertical; min-height: 100px; }
   .dashboard-grid { grid-template-columns: 1fr 1fr; }
 }
 
+/* ===========================
+   RESPONSIVE - SMALL MOBILE (≤375px)
+   =========================== */
+@media (max-width: 375px) {
+  :root {
+    --navbar-height: 58px;
+    --radius-xl: 16px;
+    --radius-lg: 14px;
+  }
+
+  /* Base layout */
+  .container { padding: 0 12px; }
+  .page-content { padding: 12px; }
+  .navbar { padding: 0 12px; }
+
+  /* Hide date text and live pill to save space */
+  .navbar-date { display: none; }
+  .live-status-pill { display: none !important; }
+
+  /* Navbar adjustments */
+  .navbar-title { font-size: 0.85rem; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .navbar-actions { gap: 6px; }
+  .notif-btn { padding: 7px; }
+  .user-avatar { width: 32px; height: 32px; font-size: 0.78rem; }
+
+  /* Notification panel — full width on tiny screens */
+  .notif-panel { width: calc(100vw - 24px); right: -4px; }
+
+  /* Sidebar narrower on tiny screens */
+  .sidebar { width: 240px; }
+
+  /* Hero section */
+  .hero-content { padding: 0 12px; gap: 32px; }
+  .hero-title { font-size: clamp(1.6rem, 8vw, 2.2rem); margin-bottom: 14px; }
+  .hero-subtitle { font-size: 0.88rem; margin-bottom: 24px; line-height: 1.6; }
+  .hero-badge { font-size: 0.72rem; padding: 6px 10px; }
+  .hero-actions { flex-direction: column; align-items: center; gap: 10px; }
+  .hero-actions .btn { width: 100%; justify-content: center; }
+  .hero-stats { grid-template-columns: 1fr; gap: 10px; margin-top: 28px; }
+  .hero-stat { padding: 14px; }
+  .hero-stat-number { font-size: 1.4rem; }
+
+  /* Sections */
+  .section { padding: 56px 0; }
+  .section-header { margin-bottom: 36px; }
+  .section-title { font-size: clamp(1.5rem, 7vw, 2rem); }
+  .section-sub { font-size: 0.88rem; }
+
+  /* Feature cards */
+  .feature-card { padding: 20px 16px; }
+  .feature-icon { width: 44px; height: 44px; font-size: 1.1rem; }
+  .feature-title { font-size: 0.95rem; }
+  .feature-desc { font-size: 0.82rem; }
+
+  /* Stats section */
+  .stats-grid { grid-template-columns: 1fr; gap: 20px; }
+  .stat-number { font-size: 2.2rem; }
+
+  /* Dashboard stat cards */
+  .dashboard-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .stat-card { padding: 14px 10px; }
+  .stat-card-value { font-size: 1.5rem; }
+  .stat-card-label { font-size: 0.7rem; }
+  .stat-card-icon { width: 40px; height: 40px; font-size: 1rem; margin-bottom: 8px; }
+
+  /* Issue cards */
+  .issue-card { padding: 14px; }
+  .issue-card-title { font-size: 0.88rem; }
+  .issue-card-desc { font-size: 0.8rem; }
+  .issue-card-actions { gap: 6px; flex-wrap: wrap; }
+  .action-btn { padding: 5px 10px; font-size: 0.75rem; }
+  .issue-card-img { height: 160px; }
+
+  /* Modal */
+  .modal { padding: 20px 16px; max-width: calc(100vw - 24px); }
+  .modal-overlay { padding: 12px; }
+
+  /* Buttons */
+  .btn { padding: 10px 18px; font-size: 0.82rem; }
+  .btn-lg { padding: 12px 22px; font-size: 0.9rem; }
+  .btn-sm { padding: 6px 12px; font-size: 0.75rem; }
+
+  /* Forms */
+  .form-input { padding: 10px 12px; font-size: 0.88rem; }
+  .upload-area { padding: 28px 16px; }
+  .upload-icon { font-size: 2rem; }
+  .upload-text { font-size: 0.88rem; }
+
+  /* Chat */
+  .chat-msg { max-width: 98%; }
+  .chat-bubble { padding: 10px 14px; font-size: 0.84rem; }
+  .chat-input { padding: 10px 14px; font-size: 0.88rem; }
+  .chat-messages { padding: 12px; gap: 10px; }
+  .chat-input-area { padding: 10px 12px; gap: 8px; }
+
+  /* Leaderboard */
+  .leaderboard-row { padding: 10px 12px; gap: 10px; }
+  .rank-num { font-size: 0.95rem; min-width: 24px; }
+  .rank-num.rank-1 { font-size: 1.1rem; }
+  .rank-num.rank-2 { font-size: 1rem; }
+
+  /* Workflow steps */
+  .workflow-steps { grid-template-columns: 1fr; }
+  .workflow-step { padding: 20px 14px; }
+
+  /* CTA section */
+  .cta-section { padding: 64px 12px; }
+  .cta-title { font-size: clamp(1.5rem, 7vw, 2rem); }
+  .cta-sub { font-size: 0.88rem; margin-bottom: 24px; }
+
+  /* Map */
+  .map-wrapper { height: calc(100vh - var(--navbar-height) - 24px); border-radius: var(--radius-lg); }
+  .map-legend { padding: 10px; min-width: 110px; }
+  .legend-item { font-size: 0.72rem; }
+
+  /* AI result grid */
+  .ai-result-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  /* Footer */
+  .footer { padding: 24px 12px; font-size: 0.78rem; }
+}
+
+/* ===========================
+   RESPONSIVE - EXTRA SMALL (≤320px)
+   =========================== */
+@media (max-width: 320px) {
+  :root {
+    --navbar-height: 52px;
+  }
+
+  .container { padding: 0 8px; }
+  .page-content { padding: 8px; }
+  .navbar { padding: 0 8px; }
+  .navbar-title { max-width: 90px; font-size: 0.78rem; }
+
+  .hero-title { font-size: clamp(1.4rem, 9vw, 1.8rem); }
+  .hero-subtitle { font-size: 0.82rem; }
+  .hero-stat-number { font-size: 1.2rem; }
+
+  /* Stack everything to single column */
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .stat-card { padding: 12px 8px; }
+  .stat-card-value { font-size: 1.3rem; }
+
+  .issue-card { padding: 12px 10px; }
+  .issue-card-img { height: 130px; }
+
+  .modal { padding: 16px 12px; }
+  .modal-overlay { padding: 8px; }
+
+  .btn { padding: 9px 14px; font-size: 0.8rem; }
+  .btn-lg { padding: 10px 18px; font-size: 0.85rem; }
+
+  .leaderboard-row { padding: 8px 10px; gap: 8px; }
+
+  .section { padding: 44px 0; }
+  .section-title { font-size: clamp(1.3rem, 8vw, 1.7rem); }
+
+  .cta-section { padding: 48px 8px; }
+  .cta-title { font-size: clamp(1.3rem, 8vw, 1.7rem); }
+
+  .notif-panel { width: calc(100vw - 16px); right: 0; }
+
+  .upload-area { padding: 20px 12px; }
+  .chat-bubble { padding: 8px 12px; font-size: 0.8rem; }
+
+  .ai-result-grid { grid-template-columns: 1fr; }
+}
+
+
+
+
+/* ===========================
+   RESPONSIVE - EXTRA SMALL (≤320px)
+   =========================== */
+@media (max-width: 320px) {
+  :root {
+    --navbar-height: 52px;
+  }
+
+  .container { padding: 0 8px; }
+  .page-content { padding: 8px; }
+  .navbar { padding: 0 8px; }
+  .navbar-title { max-width: 90px; font-size: 0.78rem; }
+
+  .hero-title { font-size: clamp(1.4rem, 9vw, 1.8rem); }
+  .hero-subtitle { font-size: 0.82rem; }
+  .hero-stat-number { font-size: 1.2rem; }
+
+  /* Stack everything to single column */
+  .dashboard-grid { grid-template-columns: 1fr; }
+  .stat-card { padding: 12px 8px; }
+  .stat-card-value { font-size: 1.3rem; }
+
+  .issue-card { padding: 12px 10px; }
+  .issue-card-img { height: 130px; }
+
+  .modal { padding: 16px 12px; }
+  .modal-overlay { padding: 8px; }
+
+  .btn { padding: 9px 14px; font-size: 0.8rem; }
+  .btn-lg { padding: 10px 18px; font-size: 0.85rem; }
+
+  .leaderboard-row { padding: 8px 10px; gap: 8px; }
+
+  .section { padding: 44px 0; }
+  .section-title { font-size: clamp(1.3rem, 8vw, 1.7rem); }
+
+  .cta-section { padding: 48px 8px; }
+  .cta-title { font-size: clamp(1.3rem, 8vw, 1.7rem); }
+
+  .notif-panel { width: calc(100vw - 16px); right: 0; }
+
+  .upload-area { padding: 20px 12px; }
+  .chat-bubble { padding: 8px 12px; font-size: 0.8rem; }
+
+  .ai-result-grid { grid-template-columns: 1fr; }
+}

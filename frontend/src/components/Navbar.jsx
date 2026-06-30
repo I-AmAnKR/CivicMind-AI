@@ -97,15 +97,15 @@ const Navbar = () => {
         </button>
         <div>
           <h2 style={{ fontSize: '1.2rem', fontFamily: 'Outfit, sans-serif', fontWeight: 700 }}>{title}</h2>
-          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: 2 }}>
+          <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', marginTop: 2 }} className="navbar-date">
             {new Date().toLocaleDateString('en-IN', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}
           </p>
         </div>
       </div>
 
       <div className="navbar-actions">
-        {/* Live status */}
-        <div title={connected ? 'Live updates active' : 'Reconnecting...'} style={{
+        {/* Live status — hide on tiny screens */}
+        <div className="live-status-pill" title={connected ? 'Live updates active' : 'Reconnecting...'} style={{
           display: 'flex', alignItems: 'center', gap: 6,
           padding: '5px 12px', borderRadius: 'var(--radius-full)',
           background: connected ? 'rgba(107,203,119,0.1)' : 'rgba(255,71,87,0.1)',
